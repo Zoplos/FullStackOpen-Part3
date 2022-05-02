@@ -1,6 +1,10 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const Note = require("./models/note");
+
+const PORT = process.env.PORT;
 
 let notes = [
   {
@@ -33,7 +37,9 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/notes", (req, res) => {
-  res.json(notes);
+  Note.find({}).then((notes) => {
+    res.json(notes);
+  });
 });
 
 app.get("/api/notes/:id", (req, res) => {
@@ -78,7 +84,6 @@ const generateId = () => {
   return maxId + 1;
 };
 
-const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
